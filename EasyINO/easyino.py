@@ -1,4 +1,4 @@
-from colorama import init, Fore, Back
+from colorama import init, Fore, Style
 import subprocess
 from sys import argv
 import argparse
@@ -8,40 +8,52 @@ def get_output(cmd : str):
 
     return subprocess.run(cmd.split( ), capture_output=True, encoding='utf8').stdout
 
-def parse_boards(cmd_out_str : str, board_filter : str):
+def parse_boards():
     """A terrible mess of a function to parse the boards and their IDs into a list of dicts"""
-
-    #Split the output by lines, remove the first (titles) and the last (empty) elements from the list
-    lines = cmd_out_str.splitlines()
-
-    #Strip whitespaces
     stripped_lines = []
-    for line in lines[1:-1]:
-        stripped_lines.append(line.strip())
-
-    #Append the names and IDs as dictionaries into a list
     boardlist = []
+
+    # Split the output by lines
+    lines = cmdout.splitlines()
+
+    # Strip whitespaces
+    # The first and the last entries in the list are useless so cut them
+    for line in lines[1:-1]:
+            stripped_lines.append(line.strip())
+
+    # Get the board FQBN
     for line in stripped_lines:
-        if not board_filter or line.lower().find(board_filter) != -1:
-            splitline = line.split(' ')
-            boardlist.append({
-                'id'   : splitline.pop(-1),
-                'name' : ' '.join(splitline)
-                })
+        if not args.board or line.lower().find(args.board) != -1:
+            line = line.split(' ')
+
+            # If we list all, we only need the last column and we don't care
+            # about the port
+
+            # If we list connected, we need the first (port) and second
+            # from the right (FBQN)
+            if not args.upload:
+                boardlist.append((line[-1], None))
+            else:
+                if line[-2]:
+                    boardlist.append((line[-2], line[0]))
+                else:
+                    boardlist.append(('[UNKNOWN]', line[0]))
+
+    #Return a tuple, in format (FBQN, Port)
     return(boardlist)
 
-def choose_board(boardlist : list):
+def choose_board():
     """List available boards, ask for choice and return the selected board"""
     for board in boardlist:
-        print(Fore.BLACK + Back.WHITE + f'\n{boardlist.index(board)}: ' + Fore.WHITE + Back.BLACK)
-        print('Name: ' + board['name'])
-        print('FQBN: ' + board['id'] + '\n')
+        print(Style.BRIGHT + f'\n{boardlist.index(board)}: {board[0]}' + Style.RESET_ALL)
+        if args.upload:
+            print(Style.BRIGHT + f'Port: {board[1]}' + Style.RESET_ALL)
 
     while True:
         try:
-            boardnum = int(input('Enter the # of the board: '))
+            boardnum = int(input('\nEnter the # of the board: '))
         except ValueError:
-            print('Invalid input')
+            print(Fore.YELLOW + 'Invalid input' + Fore.WHITE)
         else:
             if boardnum < len(boardlist):
                 return boardlist[boardnum]
@@ -65,27 +77,25 @@ if __name__ == '__main__':
     #Initialize colorama to work on Windows
     init()
 
-
     try:
-        cmd = ''
         if args.upload:
-         cmd +='arduino-cli board list'
+            cmd ='arduino-cli board list'
         else:
-            cmd += 'arduino-cli board listall'
+            cmd = 'arduino-cli board listall'
 
-        cmdout = get_output(cmd)
-        boardlist = parse_boards(cmdout,args.board)
+        cmdout = get_output()
+        boardlist = parse_boards()
         if boardlist:
-            board = choose_board(boardlist)
+            board = choose_board()
             if args.upload:
                 pass
             else:
                 pass
 
         else:
-            print(Fore.RED + 'No boards found')
+            print(Fore.RED + 'No boards found' + Style.RESET_ALL)
     except KeyboardInterrupt:
-        print(Fore.RED + '\nAborted (CTRL + C)')
+        print(Fore.RED + '\nAborted (CTRL + C)' + Style.RESET_ALL)
 
 
 

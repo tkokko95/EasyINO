@@ -2,7 +2,7 @@ from subprocess import run
 from argparse import ArgumentParser
 from colorama import init, Fore, Style
 from os import path
-from sys import exit # Apparently the executable doesn't like it if we use Python's exit()
+from sys import exit # Apparently the executable version doesn't like it if we use Python's exit()
 
 def run_cmd(command : str):
     """Run command and UTF-8 encoded output. If there's an error, print it and terminate"""
@@ -51,7 +51,7 @@ def parse_boards(output, board_filter, upload_mode):
                         'id' : '[UNKNOWN]',
                         'port' : line[0]
                     })
-    #Return a list of tuples, in format (FBQN, Port)
+    #Return the list of dictionaries
     return boards
 
 def choose_board(boards):
@@ -65,7 +65,7 @@ def choose_board(boards):
         try:
             boardnum = int(input('\nEnter the # of the board: '))
             if boardnum >= len(boardlist):
-                raise ValueError
+                raise ValueError # Yes I know this is kinda dumb
         except ValueError:
             print(Fore.YELLOW + 'Invalid input' + Fore.WHITE)
         else:

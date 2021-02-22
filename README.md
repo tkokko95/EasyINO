@@ -9,7 +9,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
 ## Options:
   *-b, --board [filter]*
 	
-	Filters the list of boards
+	Filters the list of board by ID
   
   *-u, --upload*
 	
@@ -26,7 +26,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
 
 Built using pyinstaller. Requires [colorama](https://pypi.org/project/colorama/).
 
-If you're using Linux, you will need to modify `pyinstaller/depend/utils.py` (Described [here](https://github.com/pyinstaller/pyinstaller/issues/5540)), hence, using a virtual environment is even more highly recommended than usual.
+If you're using Linux, you will need to modify `pyinstaller/depend/utils.py` as described [here](https://github.com/pyinstaller/pyinstaller/issues/5540). Hence, using a virtual environment is even more highly recommended than usual.
 
 
 

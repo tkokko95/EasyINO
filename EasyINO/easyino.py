@@ -15,7 +15,7 @@ def run_cmd(command : str):
         return proc.stdout
 
 def parse_boards(output, board_filter, upload_mode):
-    """A terrible mess of a function to parse the boards and their IDs into a list of dicts"""
+    """Parses the output and return board IDs and ports"""
     stripped_lines = []
     boards = []
 

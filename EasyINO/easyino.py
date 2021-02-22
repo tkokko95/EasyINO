@@ -89,7 +89,6 @@ if __name__ == '__main__':
         else:
             cmdout = run_cmd('arduino-cli board listall')
         boardlist = parse_boards(cmdout, args.board, args.upload)
-        print(abspath)
         if boardlist:
             sel_board = choose_board(boardlist)
             cmdout = run_cmd(f"arduino-cli compile -b {sel_board['id']} {abspath}")

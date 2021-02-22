@@ -2,4 +2,5 @@
 .vscode/
 *.ino
 env/
-
+__pycache__
+.pyinstaller_data

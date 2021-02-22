@@ -4,10 +4,10 @@ from colorama import init, Fore, Style
 from os import path
 
 
-def run_cmd(command : str, shellmode=False):
+def run_cmd(command : str):
     """Run command and UTF-8 encoded output. If there's an error, print it and terminate"""
 
-    proc = run(command, capture_output=True, encoding='utf8',check=True,shell=shellmode)
+    proc = run(command, capture_output=True, encoding='utf8', shell=True)
     if proc.stderr:
         print(Style.BRIGHT + Fore.RED +  'An error occurred:' + Style.RESET_ALL)
         print(proc.stderr)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--upload', help='upload sketch', action='store_true')
     parser.add_argument('-b', '--board', help='filter boards by name')
     args = parser.parse_args()
-
+    abspath = path.abspath(args.file)
 
     try:
         if args.upload:
@@ -89,12 +89,17 @@ if __name__ == '__main__':
         else:
             cmdout = run_cmd('arduino-cli board listall')
         boardlist = parse_boards(cmdout, args.board, args.upload)
+        print(abspath)
         if boardlist:
             sel_board = choose_board(boardlist)
+            cmdout = run_cmd(f"arduino-cli compile -b {sel_board['id']} {abspath}")
+            print(Fore.GREEN + Style.BRIGHT + '\nSketch compiled successfully:' + Style.RESET_ALL)
+            print(cmdout)
             if args.upload:
-                run_cmd(f"arduino-cli upload -b {sel_board['id']} -p {sel_board['port']} {path.abspath(args.file)}", shellmode=True)
-            else:
-                run_cmd(f"arduno-cli compile -b {sel_board['id']} {path.abspath(args.file)}", shellmode=True)
+                input('Proceed to upload? (CTRL + C to cancel, any other key to continue)')
+                print('Uploading...')
+                run_cmd(f"arduino-cli upload -b {sel_board['id']} -p {sel_board['port']} {abspath}")
+                print(Fore.GREEN + Style.BRIGHT + 'Sketch successfully uploaded' + Style.RESET_ALL)
         else:
             print(Fore.RED + 'No boards found' + Style.RESET_ALL)
     except KeyboardInterrupt:

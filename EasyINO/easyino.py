@@ -3,7 +3,6 @@ from argparse import ArgumentParser
 from colorama import init, Fore, Style
 from os import path
 
-
 def run_cmd(command : str):
     """Run command and UTF-8 encoded output. If there's an error, print it and terminate"""
 
@@ -77,27 +76,29 @@ if __name__ == '__main__':
 
     #Initialize argument parser
     parser = ArgumentParser()
-    parser.add_argument('file', help='sketch to compile or upload')
+    parser.add_argument('file', help='sketch to compile/upload')
     parser.add_argument('-u', '--upload', help='upload sketch', action='store_true')
     parser.add_argument('-b', '--board', help='filter boards by name')
+    parser.add_argument('-p', '--arduinopath',help='needed if arduino-cli is not in PATH', default='arduino-cli')
     args = parser.parse_args()
-    abspath = path.abspath(args.file)
+    FILEPATH = path.abspath(args.file)
+    ARDUINO_PATH = args.arduinopath
 
     try:
         if args.upload:
-            cmdout = run_cmd('arduino-cli board list')
+            cmdout = run_cmd(f'{ARDUINO_PATH} board list')
         else:
-            cmdout = run_cmd('arduino-cli board listall')
+            cmdout = run_cmd(f'{ARDUINO_PATH} board listall')
         boardlist = parse_boards(cmdout, args.board, args.upload)
         if boardlist:
             sel_board = choose_board(boardlist)
-            cmdout = run_cmd(f"arduino-cli compile -b {sel_board['id']} {abspath}")
+            cmdout = run_cmd(f"{ARDUINO_PATH} compile -b {sel_board['id']} {FILEPATH}")
             print(Fore.GREEN + Style.BRIGHT + '\nSketch compiled successfully:' + Style.RESET_ALL)
             print(cmdout)
             if args.upload:
                 input('Proceed to upload? (CTRL + C to cancel, any other key to continue)')
                 print('Uploading...')
-                run_cmd(f"arduino-cli upload -b {sel_board['id']} -p {sel_board['port']} {abspath}")
+                run_cmd(f"{ARDUINO_PATH} upload -b {sel_board['id']} -p {sel_board['port']} {FILEPATH}")
                 print(Fore.GREEN + Style.BRIGHT + 'Sketch successfully uploaded' + Style.RESET_ALL)
         else:
             print(Fore.RED + 'No boards found' + Style.RESET_ALL)

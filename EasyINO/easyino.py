@@ -2,6 +2,7 @@ from subprocess import run
 from argparse import ArgumentParser
 from colorama import init, Fore, Style
 from os import path
+from sys import exit # Apparently the executable doesn't like it if we use Python's exit()
 
 def run_cmd(command : str):
     """Run command and UTF-8 encoded output. If there's an error, print it and terminate"""
@@ -10,7 +11,7 @@ def run_cmd(command : str):
     if proc.stderr:
         print(Style.BRIGHT + Fore.RED +  'An error occurred:' + Style.RESET_ALL)
         print(proc.stderr)
-        exit()
+        exit(proc.returncode)
     else:
         return proc.stdout
 

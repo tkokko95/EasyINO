@@ -9,7 +9,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
 ## Options:
   *-b, --board [filter]*
 	
-	Filters the list of board part of the ID (e.g due, uno...)
+	Filters boards by ID (e.g due, uno...)
   
   *-u, --upload*
 	

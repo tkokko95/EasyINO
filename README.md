@@ -14,14 +14,27 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
   *-u, --upload*
 	
 	Uploads the program (only verifies as default)
+	
+  *-p, --arduinopath [path]*
   
-  *-v, --verbose*
-	
-	Verbose output
-	
-
+  	Sets the path to arduino-cli (by default assumes that it's in PATH)	
 
 # Requirements
-  * Python (Tested on 3.9.1)
-  * [arduino-cli](https://github.com/arduino/arduino-cli) (Make sure that it's included in your PATH. Alternatively, you can modify the .py file to point at the executable.)
+  * [arduino-cli](https://github.com/arduino/arduino-cli)
+
+# Building
+
+Built using pyinstaller. Requires [colorama](https://pypi.org/project/colorama/).
+
+If you're using Linux, you will need to modify ´pyinstaller/depend/utils.py´ (Described [here](https://github.com/pyinstaller/pyinstaller/issues/5540)), hence, using a virtual environment is even more highly recommended than usual.
+
+
+
+
+
+
+
+
+
+
 	

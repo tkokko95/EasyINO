@@ -13,7 +13,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
   
   *-u, --upload*
 	
-	Uploads the program (only verifies as default)
+	Uploads the program (only compiles as default)
 	
   *-p, --arduinopath [path]*
   

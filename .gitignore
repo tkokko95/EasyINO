@@ -3,4 +3,4 @@
 *.ino
 env/
 __pycache__
-.pyinstaller_data
+pyinstaller_data

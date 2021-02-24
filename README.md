@@ -17,7 +17,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
 	
   *-p, --arduinopath [path]*
   
-  	Sets the path to arduino-cli (by default assumes that it's in PATH)	
+  	Sets the path to arduino-cli, needed if it's not in your PATH
 
 # Requirements
   * [arduino-cli](https://github.com/arduino/arduino-cli)

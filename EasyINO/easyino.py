@@ -57,19 +57,17 @@ def parse_boards(output, board_filter, upload_mode):
 def choose_board(boards):
     """List available boards, ask for choice and return the selected board"""
     for board in boards:
-        print(Style.BRIGHT + f"\n{boardlist.index(board)}: {board['id']}" + Style.RESET_ALL)
+        print(Style.BRIGHT + f"\n{boards.index(board)}: {board['id']}" + Style.RESET_ALL)
         if args.upload:
             print(Style.BRIGHT + f"Port: {board['port']}" + Style.RESET_ALL)
 
     while True:
         try:
             boardnum = int(input('\nEnter the # of the board: '))
-            if boardnum >= len(boardlist):
-                raise ValueError # Yes I know this is kinda dumb
-        except ValueError:
+            return boards[boardnum]
+        except (ValueError, IndexError):
             print(Fore.YELLOW + 'Invalid input' + Fore.WHITE)
-        else:
-            return boardlist[boardnum]
+            
 
 if __name__ == '__main__':
     #Initialize colorama to work on Windows

@@ -20,7 +20,7 @@ A wrapper for arduino-cli, providing an interactive command-line UI for compilin
   	Sets the path to arduino-cli, needed if it's not in your PATH
 
 # Requirements
-  * [arduino-cli](https://github.com/arduino/arduino-cli)
+  * [arduino-cli](https://github.com/arduino/arduino-cli). If fresh installation, make sure to run any command (such as *arduino-cli core update-index*) so that the it can get its dependencies.
 
 # Building
 
